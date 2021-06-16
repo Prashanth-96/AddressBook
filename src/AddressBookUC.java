@@ -1,8 +1,23 @@
+import java.io.BufferedReader;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+
+
 
 
 public class AddressBookUC{
@@ -33,42 +48,7 @@ public class AddressBookUC{
 	    
 	
 }
-	/*public void store() {
-		if (option == 2) {
-			
-			Scanner st=new Scanner(System.in);
-			System.out.println("Enter your first name");
-			String fname=st.nextLine();
-			store.put("fname", fname);
-			System.out.println("Enter your Last name");
-			String lname=st.nextLine();
-			store.put("lname", lname);
-			System.out.println("Enter your address");
-			String add=st.nextLine();
-			store.put("address",add);
-			System.out.println("Enter your city");
-			String city=st.nextLine();
-			store.put("city", city);
-			System.out.println("Enter your state");
-			String state=st.nextLine();
-			store.put("state", state);
-			System.out.println("Enter your zip");
-			String zip=st.nextLine();
-			store.put("zip", zip);
-			System.out.println("Enter your phone number");
-			String phone=st.nextLine();
-			store.put("phone", phone);
-			System.out.println("Enter your email");
-			String email=st.nextLine();
-			store.put("email", email);
-			System.out.println("Saved successfully");
-			System.out.println(store.get("fname"));
-			int size=store.size();
-			System.out.println("The size of dictionary is"+size);
-			
-			
-				}
-	}*/
+	
 	
 	public void database(List info) throws IOException{
 
@@ -125,6 +105,86 @@ public class AddressBookUC{
     	
     	 }
      }
+     public void editmmode() throws FileNotFoundException{
+    	 List<String> inputList = new ArrayList<String>();
+    	 System.out.println("Enter the item to modify");
+    	 String itr=read.nextLine();
+
+    	    try{
+
+    	      File inputF = new File("test.csv");
+    	      InputStream inputFS = new FileInputStream(inputF);
+    	      BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
+
+    	      // skip the header of the csv
+    	      Stream<String> lines = br.lines();
+    	      List edit=lines.map(line -> Arrays.asList(line.split(",")))
+    	      .collect(Collectors.toList());
+    	   
+    	      System.out.println(edit);
+    	      
+    	      //lines.filter(a -> a.matches(itr))
+    	      //.collect(Collectors.toList());
+    	    } catch (IOException e) {
+    	    	
+    	    System.out.println(e);
+    	 
+     }
+     
+     }
+     
+     
+      
+     public static void readDataLineByLine(String file)
+ 	{
+ 	  
+ 	    try {
+ 	  
+ 	        // Create an object of filereader
+ 	        // class with CSV file as a parameter.
+ 	        FileReader filereader = new FileReader(file);
+ 	  
+ 	        // create csvReader object passing
+ 	        // file reader as a parameter
+ 	        CSVReader csvReader = new CSVReader(filereader);
+ 	        String[] nextRecord;
+ 	  
+ 	        // we are going to read data line by line
+ 	        while ((nextRecord = csvReader.readNext()) != null) {
+ 	            for (String cell : nextRecord) {
+ 	                System.out.print(cell + "\t");
+ 	            }
+ 	            System.out.println();
+ 	        }
+ 	    }
+ 	    catch (Exception e) {
+ 	        e.printStackTrace();
+ 	    }
+ 	    
+ 	}
+     
+     public static void delete() throws IOException {
+ 		
+ 		Scanner sc=new Scanner(System.in);
+ 		System.out.println("\nenter the first name  to delete");
+ 		String name=sc.nextLine();
+ 		 FileReader filereader = new FileReader("C:\\Users\\prash\\eclipse-workspace\\AddressBookUC1\\test.csv");
+ 		 CSVReader read = new CSVReader(filereader);
+ 		 List<String[]> myEntries = read.readAll();
+ 		 List filtered = myEntries.stream()
+                  .filter(entry -> !entry[0].equals(name))
+                  .collect(Collectors.toList());
+           FileWriter fw = new FileWriter("test.csv");
+           CSVWriter writer = new CSVWriter(fw);
+  		 writer.writeAll(filtered);
+  		 writer.close();
+          //CSVWriter w = new CSVWriter(fw);
+         System.out.println("The values after deleting\n");
+         AddressBookUC.readDataLineByLine("C:\\Users\\prash\\eclipse-workspace\\AddressBookUC1\\test.csv");
+         System.out.printf("\nThe number of records in ADDRESS BOOK is :"+ filtered.size());
+}
+     
+   
 }
 
     	 
